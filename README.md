@@ -49,7 +49,7 @@ python app.py
     ├── saldiri_test.py       # Anomali testi için saldırı script'i
     ├── veri_toplayici.py     # Canlı veri kaydetme script'i
     ├── models/
-    │   └── unsw_rf_model_v4.pkl  # (Harici olarak indirilip bu klasöre konulacak)
+    │   └── unsw_rf_model_v4.pkl  # (Harici olarak(google drive'dan) indirilip bu klasöre konulacak)
     ├── static/
     │   ├── css/style.css
     │   └── js/main.js
