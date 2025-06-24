@@ -1,0 +1,16 @@
+# Python
+__pycache__/
+*.pyc
+
+# Sanal Ortam
+venv/
+
+# Editör ve OS dosyaları
+.vscode/
+.idea/
+.DS_Store
+
+# Projeye Özel Dosyalar
+/models/*.pkl
+/models/*.joblib
+*.csv

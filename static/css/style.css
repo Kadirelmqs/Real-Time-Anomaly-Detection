@@ -1,0 +1,281 @@
+
+
+
+
+
+
+/* Genel Sayfa ve Koyu Tema Ayarları */
+:root {
+    --bg-color: #1a1a2e;
+    --card-bg-color: #16213e;
+    --primary-text-color: #e0fbfc;
+    --secondary-text-color: #a7a9be;
+    --border-color: #0f3460;
+    --normal-accent: #32de84; /* Yeşil */
+    --anomaly-accent: #e74c3c; /* Kırmızı */
+    --medium-risk-accent: #f39c12; /* Turuncu */
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--primary-text-color);
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+}
+
+/* Header (Başlık) Bölümü */
+header {
+    background-color: var(--card-bg-color);
+    padding: 1rem 2rem;
+    border-bottom: 2px solid var(--border-color);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 1.8rem;
+    color: #fff;
+}
+
+header h1 i {
+    margin-right: 10px;
+    color: var(--normal-accent);
+}
+
+/* Durum Göstergesi */
+#status-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1rem;
+}
+
+#status-indicator {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    transition: background-color 0.5s ease;
+}
+#status-indicator.connected { background-color: var(--normal-accent); }
+#status-indicator.disconnected { background-color: var(--anomaly-accent); }
+#status-indicator.waiting { background-color: var(--medium-risk-accent); }
+
+
+/* Main ve Dashboard Bölümü */
+main {
+    padding: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+#dashboard {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.stat-card {
+    background-color: var(--card-bg-color);
+    border-radius: 10px;
+    padding: 1.5rem;
+    border: 1px solid var(--border-color);
+    text-align: center;
+}
+
+.stat-card h3 {
+    margin-top: 0;
+    color: var(--secondary-text-color);
+    font-weight: 400;
+}
+
+.stat-card p {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 0;
+}
+
+.anomaly-stat p {
+    color: var(--anomaly-accent);
+}
+
+/* Canlı Log Akışı */
+#log-container-wrapper h2 {
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+#log-container {
+    background-color: rgba(0,0,0,0.1);
+    border-radius: 8px;
+    padding: 1rem;
+    height: 60vh;
+    overflow-y: auto;
+}
+
+/* Tek bir log kaydı (Kart Tasarımı) */
+.log-entry {
+    background-color: var(--card-bg-color);
+    border-left: 5px solid gray; /* Varsayılan renk */
+    border-radius: 5px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+.log-entry.normal {
+    border-left-color: var(--normal-accent);
+}
+.log-entry.anomaly {
+    border-left-color: var(--anomaly-accent);
+    background-color: #2c1d27; /* Anomali için hafif kırmızımsı arka plan */
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.data-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 0.75rem;
+    align-items: center;
+    font-family: 'Source Code Pro', monospace;
+}
+
+.key-feature-display .label {
+    color: var(--secondary-text-color);
+    font-size: 0.8rem;
+}
+.key-feature-display .value {
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+.flow-title {
+    font-weight: bold;
+    font-size: 1.2rem;
+    color: #fff;
+    grid-column: 1 / -1; /* Tüm satırı kapla */
+    margin-bottom: 0.5rem;
+}
+
+
+/* Tahmin Detayları */
+.prediction-details {
+    font-weight: bold;
+    font-size: 1.1rem;
+    text-align: right;
+}
+
+.prediction.normal { color: var(--normal-accent); }
+.prediction.anomaly { color: var(--anomaly-accent); }
+
+
+/* Buton Stili */
+.details-toggle-button {
+    background-color: #3d52a0;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    justify-self: end;
+}
+
+.details-toggle-button:hover {
+    background-color: #7091e6;
+}
+
+/* Detay İçeriği */
+.all-details-content {
+    display: none;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+    column-count: 3;
+    column-gap: 2rem;
+    font-family: 'Source Code Pro', monospace;
+    font-size: 0.9rem;
+}
+.all-details-content ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.all-details-content li {
+    margin-bottom: 0.5rem;
+}
+
+
+
+.explanation {
+    padding: 8px 12px;
+    margin: 8px 0;
+    background-color: #fff3cd; /* Uyarı için sarımsı bir arka plan */
+    border-left: 4px solid #ffeeba;
+    color: #856404;
+    font-size: 0.9em;
+    border-radius: 4px;
+}
+
+
+/* style.css dosyasının sonuna ekleyin */
+
+/* style.css içindeki ilgili bölümün DOĞRU HALİ */
+
+#chart-wrapper {
+    background-color: var(--card-bg-color); /* Değiştirildi */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    margin-bottom: 20px;
+}
+
+.chart-container {
+    position: relative;
+    height: 320px;
+    width: 100%;
+}
+
+#logs-area {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+}
+
+.log-column {
+    background-color: var(--card-bg-color); /* Değiştirildi */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    min-width: 0;
+}
+
+.log-column h2 {
+    border-bottom: 2px solid var(--border-color); /* Değiştirildi */
+    padding-bottom: 10px;
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 1.2rem;
+    color: var(--primary-text-color); /* Rengi garantilemek için eklendi */
+}
+
+#anomaly-log-container, #normal-log-container {
+    height: 500px;
+    overflow-y: auto;
+    padding-right: 10px;
+}
