@@ -10,36 +10,61 @@ Bu proje, Sivas Cumhuriyet Üniversitesi Bilgisayar Mühendisliği Bölümü bit
 - **Dinamik Görselleştirme:** `Chart.js` kullanılarak anomali ve normal trafik dağılımının canlı grafiklerle sunulması.
 - **Akıllı Açıklama:** Tespit edilen anomaliler için, modelin kararına etki eden olası nedenlerin sunulması.
 
-## Kurulum
+## Kurulum ve Çalıştırma
 
-1.  Bu depoyu (repository) klonlayın:
+Bu bölüm, projenin temiz bir sistem üzerinde kurulması ve çalıştırılması için gerekli adımları içerir.
+
+### 1. Ön Gereksinimler
+
+Projenin çalışabilmesi için sisteminizde aşağıdaki araçların kurulu olması gerekmektedir:
+
+- **Git:** Versiyon kontrol sistemi.
+  - Kurulum için: [https://git-scm.com/downloads](https://git-scm.com/downloads)
+- **Python:** Programlama dili.
+  - **Sürüm:** Python 3.10 veya üzeri. (Proje, Python 3.10.12 ile test edilmiştir).
+  - Kurulum için: [https://www.python.org/downloads/](https://www.python.org/downloads/)
+- **Python `venv` Modülü:** Python için sanal ortam yöneticisi.
+  - Çoğu Python kurulumunda varsayılan olarak gelir. Eğer sisteminizde yoksa (örneğin bazı minimal Debian/Ubuntu kurulumları), aşağıdaki komutla kurabilirsiniz:
     ```bash
-    git clone [PROJENİZİN_GITHUB_LINKİ]
-    cd [PROJE_KLASÖRÜNÜZ]
+    # Debian/Ubuntu tabanlı sistemler için:
+    sudo apt-get update && sudo apt-get install -y python3.10-venv
     ```
-2.  Bir sanal Python ortamı oluşturun ve aktive edin:
+    ### 2. Proje Kurulumu
+
+Ön gereksinimler tamamlandıktan sonra, aşağıdaki adımları takip edin:
+
+1.  **Depoyu (repository) klonlayın:**
     ```bash
-    python -m venv venv
+    git clone [https://github.com/Kadirelmqs/Real-Time-Anomaly-Detection.git](https://github.com/Kadirelmqs/Real-Time-Anomaly-Detection.git)
+    cd Real-Time-Anomaly-Detection
+    ```
+2.  **Bir sanal Python ortamı oluşturun ve aktive edin:**
+    ```bash
+    # Sanal ortamı oluştur
+    python3 -m venv venv
+    
+    # Sanal ortamı aktive et
     # Windows için:
     .\venv\Scripts\activate
     # Linux/macOS için:
     source venv/bin/activate
     ```
-3.  Gerekli kütüphaneleri `requirements.txt` dosyasından yükleyin:
+3.  **Gerekli kütüphaneleri `requirements.txt` dosyasından yükleyin:**
     ```bash
     pip install -r requirements.txt
     ```
-4.  **Model Dosyalarını İndirme:** Bu projenin kullandığı eğitilmiş model dosyaları (`.pkl`) büyük boyutları nedeniyle depoya dahil edilmemiştir. Lütfen aşağıdaki linkten `unsw_rf_model_v4.pkl` dosyasını indirin ve projenizdeki `models` klasörünün içine yerleştirin.
+4.  **Model Dosyasını İndirin:** Bu projenin kullandığı eğitilmiş model dosyası (`.pkl`) büyük boyutu nedeniyle depoya dahil edilmemiştir. Lütfen aşağıdaki linkten `unsw_rf_model_v6.pkl` dosyasını indirin ve projenizdeki `models` klasörünün içine yerleştirin.
     
     **[Model İndirme Linki: https://drive.google.com/drive/folders/1o5bWCYb93EguAER6Sfc3feQe0Hdu5bxO?usp=sharing]**
 
-## Kullanım
+#### 3. Uygulamayı Başlatma
 
-Uygulamayı çalıştırmak için **Yönetici (Administrator/root)** yetkilerine sahip bir terminal kullanmanız gerekmektedir.
+Uygulamanın ağ trafiğini dinleyebilmesi için **Yönetici (Administrator/root)** yetkilerine sahip bir terminalde çalıştırılması gerekmektedir.
 
 ```bash
-# Windows: Yönetici olarak açılmış bir PowerShell veya CMD'de çalıştırın
-# Linux/macOS: Komutun başına 'sudo' ekleyin
+# Sanal ortamın aktif olduğundan emin olun.
+# Windows: Yönetici olarak açılmış bir PowerShell veya CMD'de çalıştırın.
+# Linux/macOS: Komutun başına 'sudo' ekleyin (ör: sudo python3 app.py).
 python app.py
 
 ## Proje Yapısı

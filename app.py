@@ -7,19 +7,21 @@ import pandas as pd
 import numpy as np
 import joblib
 import statistics
+import netifaces #aktif ağ arayüzübü bulmak için
 from collections import defaultdict
+import platform
 from flask import Flask, render_template, Response
-from scapy.all import sniff, IP, TCP, UDP
+from scapy.all import sniff, IP, TCP, UDP, get_if_list, conf
 
 # --- FLASK UYGULAMASI ---
 app = Flask(__name__)
 
-ANOMALY_THRESHOLD = 0.85 #87
+ANOMALY_THRESHOLD = 0.60 #87
 
 # --- MODEL YÜKLEME ---
 try:
-    model_pipeline = joblib.load('models/unsw_rf_model_v4.pkl')
-    print("✅ Model 'unsw_rf_model_v4.pkl' başarıyla yüklendi.")
+    model_pipeline = joblib.load('models/unsw_rf_final_model.pkl')
+    print("✅ Model 'uunsw_rf_final_model.pkl' başarıyla yüklendi.")
     FINAL_MODEL_COLUMNS = model_pipeline.feature_names_in_
     print(f"🔬 Modelin beklediği {len(FINAL_MODEL_COLUMNS)} sütun adı başarıyla alındı.")
 except Exception as e:
@@ -32,6 +34,38 @@ data_queue = queue.Queue()
 AKIS_ZAMAN_ASIMI = 30 # Test için zaman aşımını 15 saniyeye düşürdük!
 active_flows = {}
 lock = threading.Lock()
+
+# dinlenecek arayüz bulma fonksiyonu
+
+def find_active_interface():
+    """
+    Sistemdeki aktif ve internete çıkan ağ arayüzünü netifaces kullanarak bulur.
+    Loopback ('lo') arayüzünü görmezden gelir.
+    """
+    print("🔎 Aktif ağ arayüzü (netifaces ile) aranıyor...")
+    try:
+        # Sistemdeki tüm arayüzlerin listesini al
+        interfaces = netifaces.interfaces()
+        for iface in interfaces:
+            # Loopback arayüzünü ('lo') her zaman atla
+            if iface == 'lo':
+                continue
+
+            # Arayüzün adres bilgilerini al
+            addrs = netifaces.ifaddresses(iface)
+
+            # Arayüzün bir IPv4 adresi atanmış mı diye kontrol et.
+            # Bu genellikle o arayüzün aktif ve bir ağa bağlı olduğunu gösterir.
+            if netifaces.AF_INET in addrs:
+                ip_info = addrs[netifaces.AF_INET][0]
+                if 'addr' in ip_info:
+                    print(f"✅ Aktif arayüz bulundu: {iface} (IP: {ip_info['addr']})")
+                    return iface
+    except Exception as e:
+        print(f"HATA: netifaces ile arayüz aranırken sorun oluştu: {e}")
+
+    print("❌ HATA: Aktif bir ağ arayüzü (loopback hariç ve IP adresi olan) bulunamadı.")
+    return None
 
 def get_flow_key(paket):
     if IP in paket:
@@ -146,7 +180,14 @@ def timeout_checker():
 def start_packet_capture():
     """ Paket yakalamayı başlatan ana fonksiyon. """
     print("🚀 Arka Plan: Paket yakalama motoru başlatılıyor...")
-    ARAYUZ_ADI = "Wi-Fi" 
+    ARAYUZ_ADI = find_active_interface() 
+    # Eğer hiçbir arayüz bulunamazsa, thread'i sonlandır.
+    if not ARAYUZ_ADI:
+        print("❌ Paket yakalama başlatılamadı çünkü aktif bir arayüz bulunamadı.")
+        return # Bu thread'in çalışmasını durdurur.
+
+
+
     print(f" dinlenecek ağ arayüzü: {ARAYUZ_ADI}")
     try:
         # Lambda testini kaldırıp orijinal process_packet'e geri dönüyoruz.
